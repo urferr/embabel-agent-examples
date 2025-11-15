@@ -1,6 +1,12 @@
 
 embabel-agent-api/src/main/resources/mcp/**
 
+/build/**
+*/build/**
+/.gradle/**
+*/.gradle/**
+
+
 /target/**
 */target/**
 */*/target/**
@@ -9,6 +15,11 @@ embabel-agent-api/src/main/resources/mcp/**
 **/application-dev.properties
 
 .idea/workspace.xml
+
+/.settings/**
+*/.settings/**
+*/bin/**
+
 
 **/*.log
 

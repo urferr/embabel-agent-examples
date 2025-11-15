@@ -1,0 +1,25 @@
+plugins {
+	id 'buildlogic.java-application-conventions'
+}
+
+dependencies {
+	implementation project(":examples-common")
+	implementation "com.embabel.agent:embabel-agent-platform-autoconfigure"
+	implementation "org.springframework.shell:spring-shell-standard"
+
+	testImplementation "com.embabel.agent:embabel-agent-test"
+
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-ollama"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-openai"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-anthropic"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-anthropic"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-dockermodels"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-shell"
+//	runtimeOnly "com.embabel.agent:embabel-agent-starter-mcpserver"
+}
+
+springBoot {
+	mainClass = 'com.embabel.example.JavaAgentSimpleShellApplication'
+//	mainClass = 'com.embabel.example.JavaAgentShellApplication'
+//	mainClass = 'com.embabel.example.JavaMcpServerApplication'
+}
