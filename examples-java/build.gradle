@@ -12,7 +12,6 @@ dependencies {
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-ollama"
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-openai"
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-anthropic"
-	runtimeOnly "com.embabel.agent:embabel-agent-starter-anthropic"
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-dockermodels"
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-shell"
 //	runtimeOnly "com.embabel.agent:embabel-agent-starter-mcpserver"
