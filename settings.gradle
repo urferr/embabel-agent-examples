@@ -1,0 +1,4 @@
+rootProject.name = 'embabel-agent-examples'
+
+include 'examples-common'
+include 'examples-java'

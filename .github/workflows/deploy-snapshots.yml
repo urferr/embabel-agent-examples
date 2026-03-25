@@ -1,4 +1,4 @@
-# This workflow will build a Java / Kotlin project with Maven
+# This workflow will build a Java / Kotlin project with Gradle
 
 name: Deploy Snapshots
 
@@ -23,16 +23,12 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
-      - name: Configure Maven Settings
-        uses: s4u/maven-settings-action@v2.8.0
-        with:
-          servers: ${{secrets.EMBABEL_ARTIFACTORY}}
+          cache: gradle
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         
-        run: mvn -P enable-agent-a2a-server-uber -DskipTests=true clean deploy
+        run: ./gradlew build --no-daemon
 
       - name: Trigger acceptance repo workflow
         uses: peter-evans/repository-dispatch@v3
@@ -40,3 +36,5 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repository: embabel/embabel-acceptance-tests
           event-type: examples-snapshots-deployed
+
+

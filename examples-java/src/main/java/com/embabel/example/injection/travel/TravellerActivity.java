@@ -15,62 +15,53 @@
  */
 package com.embabel.example.injection.travel;
 
-import com.embabel.agent.api.annotation.LlmTool;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
+import com.embabel.agent.api.annotation.LlmTool;
+
 /**
- * Record of customer activity over a period of time.
- * We add methods exposed to be exposed the LLM as tools.
+ * Record of customer activity over a period of time. We add methods exposed to
+ * be exposed the LLM as tools.
  *
  * @param from
  * @param to
  * @param trips
  */
-public record TravellerActivity(
-        String name,
-        Instant from,
-        Instant to,
-        List<Trip> trips
-) {
+public record TravellerActivity(String name, Instant from, Instant to, List<Trip> trips) {
 
-    @LlmTool
-    public float totalSpend() {
-        return trips.stream().map(Trip::amount).reduce(0f, Float::sum);
-    }
+	@LlmTool(description = "Get the total amount spent over all trips")
+	public float totalSpend() {
+		return trips.stream().map(Trip::amount).reduce(0f, Float::sum);
+	}
 
-    @LlmTool
-    public float averageSpend() {
-        return trips.isEmpty() ?
-                0f :
-                totalSpend() / trips.size();
-    }
+	@LlmTool(description = "Get the average amount spent over all trips")
+	public float averageSpend() {
+		return trips.isEmpty() ? 0f : totalSpend() / trips.size();
+	}
 
-    @LlmTool(description = "Get the number of trips taken in the period")
-    public int tripCount() {
-        return trips.size();
-    }
+	@LlmTool(description = "Get the number of trips taken in the period")
+	public int tripCount() {
+		return trips.size();
+	}
 
-    @LlmTool(description = "Get the number of days in the period")
-    public long periodDays() {
-        return Duration.between(from, to).toDays();
-    }
+	@LlmTool(description = "Get the number of days in the period")
+	public long periodDays() {
+		return Duration.between(from, to).toDays();
+	}
 
-    @LlmTool(description = "Get the distinct destinations visited in the period")
-    public List<String> destinations() {
-        return trips.stream().map(Trip::to).distinct().toList();
-    }
+	@LlmTool(description = "Get the distinct destinations visited in the period")
+	public List<String> destinations() {
+		return trips.stream().map(Trip::to).distinct().toList();
+	}
 
-    /**
-     * At this rate, how many trips would be taken in a year?
-     */
-    @LlmTool(description = "Trips per year")
-    public float tripsPerYear() {
-        long days = periodDays();
-        return days == 0 ?
-                trips.size()
-                : (trips.size() * 365f) / days;
-    }
+	/**
+	 * At this rate, how many trips would be taken in a year?
+	 */
+	@LlmTool(description = "Trips per year")
+	public float tripsPerYear() {
+		long days = periodDays();
+		return days == 0 ? trips.size() : (trips.size() * 365f) / days;
+	}
 }

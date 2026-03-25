@@ -15,6 +15,8 @@
  */
 package com.embabel.example.secured;
 
+import java.util.stream.Collectors;
+
 import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
@@ -23,8 +25,11 @@ import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.core.CoreToolGroups;
 import com.embabel.agent.domain.io.UserInput;
 import com.embabel.agent.mcpserver.security.SecureAgentTool;
-
-import java.util.stream.Collectors;
+import com.embabel.example.secured.MarketIntelligenceTypes.AnalysisSubject;
+import com.embabel.example.secured.MarketIntelligenceTypes.CompetitorInsightList;
+import com.embabel.example.secured.MarketIntelligenceTypes.KeyTrendList;
+import com.embabel.example.secured.MarketIntelligenceTypes.MarketIntelligenceReport;
+import com.embabel.example.secured.MarketIntelligenceTypes.SwotEntryList;
 
 /**
  * Agent that produces a structured market intelligence report for a given company or sector.
@@ -107,7 +112,7 @@ public class MarketIntelligenceAgent {
                         - Any notable strengths or vulnerabilities
 
                         Return a detailed raw intelligence summary of at least 400 words.
-                        """.formatted(subject.getSubject(), subject.getRegion()),
+                        """.formatted(subject.subject(), subject.region()),
                         String.class
                 );
     }
@@ -156,7 +161,7 @@ public class MarketIntelligenceAgent {
 
                         Intelligence:
                         %s
-                        """.formatted(subject.getSubject(), rawIntelligence),
+                        """.formatted(subject.subject(), rawIntelligence),
                         SwotEntryList.class
                 );
 
@@ -170,7 +175,7 @@ public class MarketIntelligenceAgent {
 
                         Intelligence:
                         %s
-                        """.formatted(subject.getSubject(), subject.getRegion(), rawIntelligence),
+                        """.formatted(subject.subject(), subject.region(), rawIntelligence),
                         CompetitorInsightList.class
                 );
 
@@ -184,7 +189,7 @@ public class MarketIntelligenceAgent {
 
                         Intelligence:
                         %s
-                        """.formatted(subject.getSubject(), subject.getRegion(), rawIntelligence),
+                        """.formatted(subject.subject(), subject.region(), rawIntelligence),
                         KeyTrendList.class
                 );
 
@@ -200,23 +205,23 @@ public class MarketIntelligenceAgent {
                         SWOT: %s
                         Trends: %s
                         """.formatted(
-                                subject.getSubject(),
-                                subject.getRegion(),
-                                swotList.getItems().stream()
-                                        .map(e -> e.getCategory() + ": " + e.getDescription())
+                                subject.subject(),
+                                subject.region(),
+                                swotList.items().stream()
+                                        .map(e -> e.category() + ": " + e.description())
                                         .collect(Collectors.joining("; ")),
-                                String.join("; ", trendList.getItems())
+                                String.join("; ", trendList.items())
                         ),
                         String.class
                 );
 
         return new MarketIntelligenceReport(
-                subject.getSubject(),
-                subject.getRegion(),
+                subject.subject(),
+                subject.region(),
                 summary,
-                swotList.getItems(),
-                competitorList.getItems(),
-                trendList.getItems(),
+                swotList.items(),
+                competitorList.items(),
+                trendList.items(),
                 summary
         );
     }

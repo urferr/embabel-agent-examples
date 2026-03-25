@@ -1,5 +1,5 @@
-# This workflow will build a Java / Kotlin project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+# This workflow will build a Java / Kotlin project with Gradle, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
@@ -21,7 +21,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
+          cache: gradle
       - name: Configure Testcontainers
         run: |
           mkdir -p /home/runner
@@ -30,19 +30,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -U -B test verify
+        run: ./gradlew build --no-daemon
 
   notify:
     needs: [build]
     if: failure() && github.ref == 'refs/heads/main'
     uses: embabel/embabel-build/.github/workflows/discord-notify.yml@main
     secrets: inherit
-    
-  notify-recovery:
-    needs: [build]
-    if: success() && github.ref == 'refs/heads/main'
-    uses: embabel/embabel-build/.github/workflows/notify-recovery.yml@main
-    with:
-      branch: main
-      caller_run_id: ${{ github.run_id }}
-    secrets: inherit
+
+

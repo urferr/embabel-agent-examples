@@ -1,0 +1,35 @@
+plugins {
+	id 'buildlogic.java-application-conventions'
+}
+
+dependencies {
+    compileOnly "com.embabel.agent:embabel-agent-starter-mcpserver-security"
+
+
+	implementation project(":examples-common")
+	implementation "com.embabel.agent:embabel-agent-platform-autoconfigure"
+	implementation "com.embabel.agent:embabel-agent-domain"
+    implementation "org.springframework.data:spring-data-commons"
+	implementation "org.springframework.shell:spring-shell-starter"
+
+	testImplementation "com.embabel.agent:embabel-agent-test"
+
+//    runtimeOnly "org.springframework.boot:spring-boot-starter-webmvc"
+    runtimeOnly 'org.springframework.boot:spring-boot-starter-restclient'
+    runtimeOnly 'org.springframework.boot:spring-boot-starter-security'
+    runtimeOnly 'org.springframework.boot:spring-boot-starter-security-oauth2-client'
+
+    runtimeOnly "com.embabel.agent:embabel-agent-starter-ollama"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-openai"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-anthropic"
+    runtimeOnly "com.embabel.agent:embabel-agent-starter-dockermodels"
+    runtimeOnly "com.embabel.agent:embabel-agent-starter-bedrock"
+	runtimeOnly "com.embabel.agent:embabel-agent-starter-shell"
+//	runtimeOnly "com.embabel.agent:embabel-agent-starter-mcpserver"
+}
+
+springBoot {
+	mainClass = 'com.embabel.example.JavaAgentSimpleShellApplication'
+//	mainClass = 'com.embabel.example.JavaAgentShellApplication'
+//	mainClass = 'com.embabel.example.JavaMcpServerApplication'
+}
