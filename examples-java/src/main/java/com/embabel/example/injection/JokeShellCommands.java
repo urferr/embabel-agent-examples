@@ -15,44 +15,39 @@
  */
 package com.embabel.example.injection;
 
-import com.embabel.example.injection.travel.ActivitySummarizer;
 import org.springframework.shell.core.command.annotation.Command;
 import org.springframework.shell.core.command.annotation.Option;
 import org.springframework.stereotype.Component;
 
-@Component
-public record JokeShellCommands(
-        InjectedComponent injectedComponent,
-        ActivitySummarizer activitySummarizer
-) {
+import com.embabel.example.injection.travel.ActivitySummarizer;
 
-    @Command(name = "string-joke", description = "Tell a joke")
+@Component
+public record JokeShellCommands(InjectedComponent injectedComponent, ActivitySummarizer activitySummarizer) {
+
+	@Command(name = "stringJoke", description = "Tell a joke")
     public String stringJoke(
             @Option(longName = "topic", description = "topic of the joke", defaultValue = "galahs") String topic
     ) {
         return injectedComponent.tellJokeAbout(topic);
     }
 
-    @Command(name = "object-joke", description = "Create a joke object")
-    public String objectJoke(
-            @Option(longName = "topic1", description = "first topic", defaultValue = "dogs") String topic1,
-            @Option(longName = "topic2", description = "second topic", defaultValue = "cats") String topic2,
-            @Option(longName = "voice", description = "voice of the joke", defaultValue = "Shakespearean") String voice
+	@Command(description = "Create a joke object")
+	public String objectJoke(@Option(longName = "topic1", description = "first topic", defaultValue = "dogs") String topic1,
+			@Option(longName = "topic2", description = "second topic", defaultValue = "cats") String topic2,
+			@Option(longName = "voice", description = "voice of the joke", defaultValue = "Shakespearean") String voice
 
-    ) {
-        var joke = injectedComponent.createJokeObjectAbout(topic1, topic2, voice);
-        return joke.toString();
-    }
+	) {
+		var joke = injectedComponent.createJokeObjectAbout(topic1, topic2, voice);
+		return joke.toString();
+	}
 
-    @Command(name = "travel-report", description = "Analyze travel report")
-    public String travelReport(
-    ) {
-        var summary = activitySummarizer.summarizeActivity(1L);
-        if (summary == null) {
-            return "No customer found";
-        }
-        return summary.toString();
-    }
-
+	@Command(description = "Analyze travel report")
+	public String travelReport() {
+		var summary = activitySummarizer.summarizeActivity(1L);
+		if (summary == null) {
+			return "No customer found";
+		}
+		return summary.toString();
+	}
 
 }

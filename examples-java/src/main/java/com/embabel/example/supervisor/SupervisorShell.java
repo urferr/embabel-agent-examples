@@ -29,8 +29,8 @@ public record SupervisorShell(
         Stages stages
 ) {
 
-    @Command(name = "cook", description = "let's cook")
-    public String cook(@Option(longName = "request", defaultValue = "Steak tartare for Rod--ask Jamie to cook") String request) {
+    @Command(description = "let's cook")
+    public String cook(@Option(defaultValue = "Steak tartare for Rod--ask Jamie to cook") String request) {
         var meal = SupervisorInvocation.on(agentPlatform)
                 .returning(Stages.Meal.class)
                 .withScope(AgentScopeBuilder.fromInstance(stages))

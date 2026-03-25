@@ -28,7 +28,7 @@ public record SupportAgentShellCommands(
         AgentPlatform agentPlatform
 ) {
 
-    @Command(name = "bank-support", description = "Get bank support for a customer query")
+    @Command(description = "Get bank support for a customer query")
     public String bankSupport(
             @Option(longName = "id", description = "customer id", defaultValue = "123") Long id,
             @Option(longName = "query", description = "customer query", defaultValue = "What's my balance, including pending amounts?") String query

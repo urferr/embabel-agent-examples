@@ -15,99 +15,54 @@
  */
 package com.embabel.example.horoscope;
 
-import com.embabel.agent.domain.library.NewsStory;
-import com.embabel.agent.domain.library.RelevantNewsStories;
-import com.embabel.agent.test.unit.FakeOperationContext;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import com.embabel.agent.domain.library.NewsStory;
+import com.embabel.agent.domain.library.RelevantNewsStories;
+import com.embabel.agent.test.unit.FakeOperationContext;
 
 public class StarNewsFinderTest {
 
-    @Test
-    void newsSelectionPreservesSourceDataAndRemovesDuplicates() {
-        var feed = mock(NewsFeedService.class);
-        var finder = new StarNewsFinder(mock(HoroscopeService.class), feed, 5, "test-model");
-        var context = new FakeOperationContext();
-        var stories = new RelevantNewsStories(Arrays.asList(new NewsStory(
-                "https://example.com/news/training", "Training opportunities", "New training courses announced.")));
-        when(feed.latestStories(any())).thenReturn(stories.getItems());
-        context.expectResponse(new StarNewsFinder.NewsSelection(Arrays.asList(0, 0)));
+	@Nested
+	class Writeup {
 
-        var result = finder.findNewsStories(new StarPerson("Arnab", "Aries"),
-                new Horoscope("Focus on your career"), context.ai());
+		@Test
+		void writeupPromptMustContainKeyData() {
+			var wordCount = 100;
 
-        assertEquals(1, result.getItems().size());
-        assertSame(stories.getItems().getFirst(), result.getItems().getFirst());
-        var invocations = context.getLlmInvocations();
-        assertEquals(1, invocations.size());
-        assertTrue(invocations.getFirst().getMessages().getFirst().getContent().contains("Training opportunities"));
-        assertTrue(invocations.getLast().getInteraction().getToolGroups().isEmpty(),
-                "Selection must not repeat web tool calls");
-    }
+			HoroscopeService horoscopeService = mock(HoroscopeService.class);
+			StarNewsFinder starNewsFinder = new StarNewsFinder(horoscopeService, 5, wordCount);
 
-    @Test
-    void rejectsUnknownStoryIndex() {
-        var feed = mock(NewsFeedService.class);
-        when(feed.latestStories(any())).thenReturn(Arrays.asList(new NewsStory("https://example.com/news", "News", "Summary")));
-        var finder = new StarNewsFinder(mock(HoroscopeService.class), feed, 5, "test-model");
-        var context = new FakeOperationContext();
-        context.expectResponse(new StarNewsFinder.NewsSelection(Arrays.asList(1)));
-        assertThrows(IllegalStateException.class, () -> finder.findNewsStories(
-                new StarPerson("Arnab", "Aries"), new Horoscope("Career"), context.ai()));
-    }
+			var context = new FakeOperationContext();
+			context.expectResponse(new com.embabel.example.horoscope.Writeup("Things are gonna get frosty"));
 
-    @Nested
-    class Writeup {
+			NewsStory cockatoos = new NewsStory("https://fake.com.au", "Cockatoo behavior",
+					"Cockatoos are eating cabbages");
 
-        @Test
-        void writeupPromptMustContainKeyData() {
+			NewsStory emus = new NewsStory("https://morefake.com.au", "Emu movements", "Emus are massing");
 
-            HoroscopeService horoscopeService = mock(HoroscopeService.class);
-            StarNewsFinder starNewsFinder = new StarNewsFinder(horoscopeService, mock(NewsFeedService.class), 5, "test-model");
-            var context = new FakeOperationContext();
-            context.expectResponse("Gonna be a good day");
+			StarPerson starPerson = new StarPerson("Lynda", "Scorpio");
+			RelevantNewsStories relevantNewsStories = new RelevantNewsStories(Arrays.asList(cockatoos, emus));
 
-            NewsStory cockatoos = new NewsStory(
-                    "https://fake.com.au",
-                    "Cockatoo behavior",
-                    "Cockatoos are eating cabbages"
-            );
+			var result = starNewsFinder.starNewsWriteup(starPerson, relevantNewsStories,
+					new Horoscope("This is a good day for you"), context);
 
-            NewsStory emus = new NewsStory(
-                    "https://morefake.com.au",
-                    "Emu movements",
-                    "Emus are massing"
-            );
+			var prompt = context.getLlmInvocations().getFirst().getMessages().getFirst().getContent();
+			var toolGroups = context.getLlmInvocations().getFirst().getInteraction().getToolGroups();
 
-            StarPerson starPerson = new StarPerson("Lynda", "Scorpio");
-            RelevantNewsStories relevantNewsStories = new RelevantNewsStories(Arrays.asList(cockatoos, emus));
-            Horoscope horoscope = new Horoscope("This is a good day for you");
+			assertTrue(prompt.contains(starPerson.getName()));
+			assertTrue(prompt.contains("Scorpio"));
+			assertTrue(prompt.contains(cockatoos.getSummary()));
+			assertTrue(prompt.contains(emus.getSummary()));
+			assertTrue(prompt.contains(String.valueOf(wordCount)));
 
-            var result = starNewsFinder.writeup(starPerson, relevantNewsStories, horoscope, context.ai());
-            assertTrue(result.getContent().startsWith("Gonna be a good day"));
-            assertTrue(result.getContent().contains("[Cockatoo behavior](https://fake.com.au)"));
-            assertTrue(result.getContent().contains("[Emu movements](https://morefake.com.au)"));
-
-            var prompt = context.getLlmInvocations().getFirst().getMessages().getFirst().getContent();
-            var toolGroups = context.getLlmInvocations().getFirst().getInteraction().getToolGroups();
-
-
-            assertTrue(prompt.contains(starPerson.getName()));
-            assertTrue(prompt.contains(starPerson.sign()));
-            assertTrue(prompt.contains(cockatoos.getSummary()));
-            assertTrue(prompt.contains(emus.getSummary()));
-
-            assertTrue(toolGroups.isEmpty(), "The LLM should not have been given any tool groups");
-        }
-    }
+			assertTrue(toolGroups.isEmpty(), "The LLM should not have been given any tool groups");
+		}
+	}
 }
