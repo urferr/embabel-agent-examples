@@ -1,4 +1,4 @@
-![Build](https://github.com/embabel/embabel-agent/actions/workflows/maven.yml/badge.svg)
+![Build](https://github.com/embabel/embabel-agent/actions/workflows/gradle.yml/badge.svg)
 
 [//]: # ([![Quality Gate Status]&#40;https://sonarcloud.io/api/project_badges/measure?project=embabel_embabel-agent&metric=alert_status&token=d275d89d09961c114b8317a4796f84faf509691c&#41;]&#40;https://sonarcloud.io/summary/new_code?id=embabel_embabel-agent&#41;)
 
