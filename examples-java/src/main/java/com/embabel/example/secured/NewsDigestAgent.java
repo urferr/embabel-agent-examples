@@ -15,6 +15,8 @@
  */
 package com.embabel.example.secured;
 
+import java.util.stream.Collectors;
+
 import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
@@ -23,8 +25,9 @@ import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.core.CoreToolGroups;
 import com.embabel.agent.domain.io.UserInput;
 import com.embabel.agent.mcpserver.security.SecureAgentTool;
-
-import java.util.stream.Collectors;
+import com.embabel.example.secured.NewsDigestTypes.DigestItemList;
+import com.embabel.example.secured.NewsDigestTypes.NewsDigest;
+import com.embabel.example.secured.NewsDigestTypes.NewsTopic;
 
 /**
  * Agent that researches a topic via web search and returns a curated news digest
@@ -101,8 +104,8 @@ public class NewsDigestAgent {
     )
     @Action
     public NewsDigest produceDigest(NewsTopic topic, OperationContext context) {
-        String focusClause = !topic.getFocusArea().isBlank()
-                ? "Focus specifically on: " + topic.getFocusArea() + "."
+        String focusClause = !topic.focusArea().isBlank()
+                ? "Focus specifically on: " + topic.focusArea() + "."
                 : "";
 
         DigestItemList digestItemList = context.ai()
@@ -113,7 +116,7 @@ public class NewsDigestAgent {
                         Use web search to find the 5 most recent and relevant news items about: %s.
                         %s
                         For each item return a headline, a 2-3 sentence summary, and the source URL.
-                        """.formatted(topic.getTopic(), focusClause),
+                        """.formatted(topic.topic(), focusClause),
                         DigestItemList.class
                 );
 
@@ -127,14 +130,14 @@ public class NewsDigestAgent {
                         Items:
                         %s
                         """.formatted(
-                                topic.getTopic(),
-                                digestItemList.getItems().stream()
-                                        .map(item -> "- " + item.getHeadline() + ": " + item.getSummary())
+                                topic.topic(),
+                                digestItemList.items().stream()
+                                        .map(item -> "- " + item.headline() + ": " + item.summary())
                                         .collect(Collectors.joining("\n"))
                         ),
                         String.class
                 );
 
-        return new NewsDigest(topic.getTopic(), digestItemList.getItems(), narrative);
+        return new NewsDigest(topic.topic(), digestItemList.items(), narrative);
     }
 }

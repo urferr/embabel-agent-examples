@@ -2,7 +2,7 @@
 
 <img align="left" src="https://github.com/embabel/embabel-agent/blob/main/embabel-agent-api/images/315px-Meister_der_Weltenchronik_001.jpg?raw=true" width="180">
 
-![Build](https://github.com/embabel/embabel-agent-examples/actions/workflows/maven.yml/badge.svg)
+![Build](https://github.com/embabel/embabel-agent-examples/actions/workflows/gradle.yml/badge.svg)
 
 [//]: # ([![Quality Gate Status]&#40;https://sonarcloud.io/api/project_badges/measure?project=embabel_embabel-agent&metric=alert_status&token=d275d89d09961c114b8317a4796f84faf509691c&#41;]&#40;https://sonarcloud.io/summary/new_code?id=embabel_embabel-agent&#41;)
 
@@ -676,3 +676,4 @@ embabel-agent-examples/
 ## 贡献者
 
 [![Embabel 贡献者](https://contrib.rocks/image?repo=embabel/embabel-agent-examples)](https://github.com/embabel/embabel-agent-examples/graphs/contributors)
+
