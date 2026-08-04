@@ -58,6 +58,13 @@
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
         </dependency>
+
+        <!-- Spring Boot 4 moved Zipkin auto-configuration out of actuator into this module;
+             without it no ZipkinSpanExporter bean is created and tracing is silently disabled -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-zipkin</artifactId>
+        </dependency>
         <!-- ================ Observability ================ -->
 
         <!-- Unit Test Dependencies -->
