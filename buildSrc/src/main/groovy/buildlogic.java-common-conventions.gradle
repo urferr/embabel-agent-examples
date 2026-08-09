@@ -37,7 +37,7 @@ version = '0.5.0-SNAPSHOT'
 
 ext {
     set('springAiVersion', "2.0.1")
-    set('embabelAgentVersion', "1.5.3-SNAPSHOT")
+    set('embabelAgentVersion', "1.5.4-SNAPSHOT")
 }
 
 dependencies {
