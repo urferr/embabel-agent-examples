@@ -13,6 +13,7 @@ plugins {
 
 repositories {
     // Use Maven Central for resolving dependencies.
+    mavenLocal()
     mavenCentral()
 	maven {
 		name = 'embabel-releases'
@@ -35,8 +36,8 @@ version = '0.5.0-SNAPSHOT'
 
 
 ext {
-    set('springAiVersion', "2.0.0")
-    set('embabelAgentVersion', "1.5.0-SNAPSHOT")
+    set('springAiVersion', "2.0.1")
+    set('embabelAgentVersion', "1.5.2-SNAPSHOT")
 }
 
 dependencies {

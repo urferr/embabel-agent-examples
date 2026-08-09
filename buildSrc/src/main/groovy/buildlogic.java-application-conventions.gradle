@@ -8,7 +8,7 @@ plugins {
 }
 
 ext {
-	set('springShellVersion', "3.4.3")
+	set('springShellVersion', "4.0.3")
 }
 
 // from spring dependency plugin
