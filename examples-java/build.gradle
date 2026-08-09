@@ -10,7 +10,6 @@ dependencies {
 	implementation "com.embabel.agent:embabel-agent-platform-autoconfigure"
 	implementation "com.embabel.agent:embabel-agent-domain"
     implementation "org.springframework.data:spring-data-commons"
-	implementation "org.springframework.shell:spring-shell-starter"
 
 	testImplementation "com.embabel.agent:embabel-agent-test"
 
@@ -18,12 +17,13 @@ dependencies {
     runtimeOnly 'org.springframework.boot:spring-boot-starter-restclient'
     runtimeOnly 'org.springframework.boot:spring-boot-starter-security'
     runtimeOnly 'org.springframework.boot:spring-boot-starter-security-oauth2-client'
+    runtimeOnly "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
 
     runtimeOnly "com.embabel.agent:embabel-agent-starter-ollama"
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-openai"
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-anthropic"
     runtimeOnly "com.embabel.agent:embabel-agent-starter-dockermodels"
-    runtimeOnly "com.embabel.agent:embabel-agent-starter-bedrock"
+//    runtimeOnly "com.embabel.agent:embabel-agent-starter-bedrock"
 	runtimeOnly "com.embabel.agent:embabel-agent-starter-shell"
 //	runtimeOnly "com.embabel.agent:embabel-agent-starter-mcpserver"
 }
